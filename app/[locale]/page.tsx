@@ -1,11 +1,13 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getSiteContent } from '@/content';
+import { getFeaturedProducts } from '@/content/products';
 import { Navbar } from '@/components/Navbar';
 import { Hero } from '@/components/Hero';
-import { LogoMarquee } from '@/components/LogoMarquee';
+import { GameShowcase } from '@/components/GameShowcase';
+import { DesignServices } from '@/components/DesignServices';
 import { ServiceCommitment } from '@/components/ServiceCommitment';
 import { HowItWorks } from '@/components/HowItWorks';
-import { FeaturedPlans } from '@/components/FeaturedPlans';
+import { FeaturedProducts } from '@/components/FeaturedProducts';
 import { FAQ } from '@/components/FAQ';
 import { CTABanner } from '@/components/CTABanner';
 import { Footer } from '@/components/Footer';
@@ -20,6 +22,7 @@ export default async function HomePage({
 
   const site = getSiteContent(locale);
   const t = await getTranslations('A11y');
+  const featured = getFeaturedProducts(4);
 
   return (
     <>
@@ -31,10 +34,22 @@ export default async function HomePage({
 
       <main id="main">
         <Hero hero={site.hero} />
-        <LogoMarquee marquee={site.marquee} ariaLabel={t('marqueeLabel')} />
+        <GameShowcase
+          data={site.gameShowcase}
+          fromPrefix={site.store.fromPrefix}
+          currency="₫"
+        />
+        <DesignServices
+          data={site.designServices}
+          fromPrefix={site.designServices.items[0]?.cta ?? ''}
+        />
+        <FeaturedProducts
+          data={site.featured}
+          products={featured}
+          storeStrings={site.store}
+        />
         <ServiceCommitment data={site.serviceCommitment} />
         <HowItWorks data={site.howItWorks} />
-        <FeaturedPlans data={site.plans} />
         <FAQ data={site.faq} />
         <CTABanner data={site.ctaBanner} />
       </main>

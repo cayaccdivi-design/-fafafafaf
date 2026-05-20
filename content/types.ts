@@ -1,14 +1,28 @@
-export type BrandKey =
-  | 'sora'
-  | 'kiro'
-  | 'jimeng'
-  | 'chatgpt'
-  | 'claude'
-  | 'gemini'
-  | 'grok';
+/* ============================================================
+   Brand & icon keys
+   ============================================================ */
+export type GameKey =
+  | 'roblox'
+  | 'lienquan'
+  | 'freefire'
+  | 'playtogether'
+  | 'lol'
+  | 'fifa'
+  | 'genshin';
+
+export type DesignServiceKey =
+  | 'logo'
+  | 'shop-banner'
+  | 'thumbnail'
+  | 'display-banner'
+  | 'youtube-banner'
+  | 'icons';
 
 export type IconKey = 'shield-check' | 'activity' | 'headphones';
 
+/* ============================================================
+   Homepage content
+   ============================================================ */
 export interface CommitmentItem {
   icon: IconKey;
   title: string;
@@ -21,16 +35,13 @@ export interface HowStep {
   desc: string;
 }
 
-export interface Plan {
-  brand: BrandKey;
-  name: string;
-  price: number;
+export interface DesignServiceCard {
+  key: DesignServiceKey;
+  title: string;
+  desc: string;
+  fromPrice: number;
   currency: string;
-  period: string;
-  features: string[];
   cta: string;
-  popular: boolean;
-  popularLabel?: string;
 }
 
 export interface FaqItem {
@@ -53,8 +64,21 @@ export interface SiteContent {
     sub: string;
     primaryCta: string;
     secondaryCta: string;
+    badges: string[];
   };
-  marquee: { caption: string; brands: string[] };
+  gameShowcase: {
+    eyebrow: string;
+    heading: string;
+    sub: string;
+    seeAll: string;
+  };
+  designServices: {
+    eyebrow: string;
+    heading: string;
+    sub: string;
+    items: DesignServiceCard[];
+    seeAll: string;
+  };
   serviceCommitment: {
     eyebrow: string;
     heading: string;
@@ -67,11 +91,11 @@ export interface SiteContent {
     sub: string;
     steps: HowStep[];
   };
-  plans: {
+  featured: {
     eyebrow: string;
     heading: string;
     sub: string;
-    items: Plan[];
+    seeAll: string;
   };
   faq: {
     eyebrow: string;
@@ -84,6 +108,59 @@ export interface SiteContent {
     tagline: string;
     columns: FooterColumn[];
     copyright: string;
-    icp: string;
   };
+  store: {
+    badgeNew: string;
+    badgePopular: string;
+    badgeSale: string;
+    fromPrefix: string;
+    perOrder: string;
+    primaryCta: string;
+    detailsCta: string;
+    bannerEyebrow: string;
+    bannerHeading: string;
+    bannerSub: string;
+    categoryAll: string;
+    categoryGames: string;
+    categoryDesign: string;
+    sortLabel: string;
+    sortNewest: string;
+    sortPopular: string;
+    sortPriceAsc: string;
+    sortPriceDesc: string;
+  };
+}
+
+/* ============================================================
+   Product catalogue
+   ============================================================ */
+export type ProductCategory = 'games' | 'design';
+
+export type ProductBadge = 'new' | 'popular' | 'sale';
+
+export interface Variant {
+  id: string;
+  label: string;
+  price: number;
+  originalPrice?: number;
+}
+
+export interface Product {
+  slug: string;
+  category: ProductCategory;
+  /** Game brand key when category === 'games' */
+  brand?: GameKey;
+  /** Design service key when category === 'design' */
+  service?: DesignServiceKey;
+  name: string;
+  tagline: string;
+  description: string;
+  /** Lowest price shown on the card */
+  fromPrice: number;
+  currency: string;
+  badges: ProductBadge[];
+  /** Variants shown on the detail page */
+  variants: Variant[];
+  /** Hero highlights on the detail page */
+  highlights: string[];
 }

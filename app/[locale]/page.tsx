@@ -34,11 +34,7 @@ export default async function HomePage({
 
       <main id="main">
         <Hero hero={site.hero} />
-        <GameShowcase
-          data={site.gameShowcase}
-          fromPrefix={site.store.fromPrefix}
-          currency="₫"
-        />
+        <GameShowcase data={site.gameShowcase} />
         <DesignServices
           data={site.designServices}
           fromPrefix={site.designServices.items[0]?.cta ?? ''}

@@ -10,20 +10,18 @@ import type { GameKey } from '@/content/types';
 
 interface Props {
   data: { eyebrow: string; heading: string; sub: string; seeAll: string };
-  fromPrefix: string;
-  currency: string;
 }
 
-/* Map every game key → its top-up product slug */
+/* slug lookup so each tile deep-links to its product page */
 const GAME_TO_SLUG: Record<GameKey, string | undefined> = GAME_KEYS.reduce(
   (acc, k) => {
     acc[k] = products.find((p) => p.brand === k)?.slug;
     return acc;
   },
-  {} as Record<GameKey, string | undefined>
+  {} as Record<GameKey, string | undefined>,
 );
 
-export function GameShowcase({ data, fromPrefix, currency }: Props) {
+export function GameShowcase({ data }: Props) {
   return (
     <section className="relative">
       <div className="mx-auto max-w-content px-6 py-24 md:py-32">
@@ -32,7 +30,7 @@ export function GameShowcase({ data, fromPrefix, currency }: Props) {
           initial="hidden"
           whileInView="show"
           viewport={inViewOnce}
-          className="flex flex-col items-center text-center mb-12 md:mb-16"
+          className="flex flex-col items-center text-center mb-14 md:mb-20"
         >
           <motion.p
             variants={fadeUp}
@@ -54,47 +52,44 @@ export function GameShowcase({ data, fromPrefix, currency }: Props) {
           </motion.p>
         </motion.div>
 
+        {/* Plain icon-and-name grid — no card chrome, no price */}
         <motion.ul
           variants={staggerParent}
           initial="hidden"
           whileInView="show"
           viewport={inViewOnce}
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4 md:gap-5"
+          className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-x-4 gap-y-8 md:gap-y-10"
         >
           {GAME_KEYS.map((key) => {
             const brand = GAME_BRANDS[key];
             const slug = GAME_TO_SLUG[key];
-            const lowestPrice = products.find((p) => p.brand === key)?.fromPrice;
 
             return (
-              <motion.li key={key} variants={fadeUp} className="h-full">
+              <motion.li key={key} variants={fadeUp}>
                 <Link
-                  href={slug ? `/store/${slug}` : '/store'}
-                  className="group relative h-full flex flex-col items-center text-center gap-3 p-5 md:p-6 rounded-2xl glass glass-hover-ring transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                  href={slug ? `/store/${slug}` : '/store?cat=games'}
+                  className="group flex flex-col items-center text-center gap-3 outline-none"
+                  aria-label={brand.name}
                 >
-                  {/* Holographic sheen */}
-                  <span
-                    aria-hidden="true"
-                    className="holo-sheen absolute inset-0 opacity-50 group-hover:opacity-90 transition-opacity duration-500"
-                  />
-
-                  {/* Brand badge */}
-                  <span className="relative z-10">
-                    <GameBadge brand={key} size={56} rounded="2xl" />
+                  <span className="relative inline-flex transition-transform duration-300 group-hover:-translate-y-1 group-focus-visible:-translate-y-1">
+                    {/* Soft glow that wakes up on hover */}
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-0 rounded-3xl blur-xl opacity-0 group-hover:opacity-60 group-focus-visible:opacity-60 transition-opacity duration-300"
+                      style={{
+                        backgroundImage: `linear-gradient(135deg, ${brand.from} 0%, ${brand.to} 100%)`,
+                      }}
+                    />
+                    <GameBadge
+                      brand={key}
+                      size={72}
+                      rounded="2xl"
+                      className="relative"
+                    />
                   </span>
-
-                  {/* Name */}
-                  <span className="relative z-10 text-[14px] md:text-[15px] font-semibold text-fg leading-tight">
+                  <span className="text-[13px] md:text-[14px] font-semibold text-fg leading-tight">
                     {brand.name}
                   </span>
-
-                  {/* Price */}
-                  {lowestPrice && (
-                    <span className="relative z-10 text-[12px] text-fg-muted">
-                      {fromPrefix} {currency}
-                      {lowestPrice.toLocaleString('en-US')}
-                    </span>
-                  )}
                 </Link>
               </motion.li>
             );
@@ -106,7 +101,7 @@ export function GameShowcase({ data, fromPrefix, currency }: Props) {
           initial="hidden"
           whileInView="show"
           viewport={inViewOnce}
-          className="mt-10 text-center"
+          className="mt-14 text-center"
         >
           <Link
             href="/store?cat=games"

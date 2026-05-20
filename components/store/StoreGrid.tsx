@@ -54,13 +54,11 @@ export function StoreGrid({ products, strings }: Props) {
   );
 
   const filtered = useMemo(() => {
-    // 1) category filter
     let base =
       filter === 'all'
         ? products
         : products.filter((p) => p.category === filter);
 
-    // 2) search filter — name + tagline + brand
     const q = query.trim().toLowerCase();
     if (q) {
       base = base.filter(
@@ -72,7 +70,6 @@ export function StoreGrid({ products, strings }: Props) {
       );
     }
 
-    // 3) sort
     const popularRank = (p: Product) =>
       (p.badges.includes('popular') ? 0 : 1) +
       (p.badges.includes('new') ? 0 : 0.1);
@@ -106,12 +103,27 @@ export function StoreGrid({ products, strings }: Props) {
   return (
     <section className="relative">
       <div className="mx-auto max-w-content px-6 pb-24 md:pb-32">
-        {/* === Mobile / tablet — horizontal sticky toolbar === */}
-        <div className="lg:hidden sticky top-24 z-30 mb-6">
-          <div className="rounded-3xl glass-strong shadow-card p-3">
-            <SearchInput value={query} onChange={setQuery} />
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-              <div role="tablist" className="flex flex-wrap gap-1.5">
+        {/* === Long horizontal sidebar — sits above the cards === */}
+        <div className="sticky top-24 z-30 mb-6 md:mb-8">
+          <div className="rounded-3xl glass-strong shadow-card p-3 md:px-5 md:py-3">
+            <div className="flex flex-wrap items-center gap-3 md:gap-4">
+              {/* Short search bar — compact width on desktop */}
+              <div className="w-full sm:w-auto sm:flex-1 sm:max-w-[260px]">
+                <SearchInput value={query} onChange={setQuery} />
+              </div>
+
+              {/* Vertical divider on md+ */}
+              <span
+                aria-hidden="true"
+                className="hidden md:block self-stretch w-px bg-border"
+              />
+
+              {/* Outlined category buttons with counts */}
+              <div
+                role="tablist"
+                aria-label="Product categories"
+                className="flex flex-wrap items-center gap-1.5 md:gap-2"
+              >
                 {tabs.map((t) => {
                   const active = filter === t.key;
                   const Icon = TAB_ICONS[t.key];
@@ -122,127 +134,81 @@ export function StoreGrid({ products, strings }: Props) {
                       aria-selected={active}
                       onClick={() => onTab(t.key)}
                       className={cn(
-                        'inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full text-[13px] font-medium transition-all',
+                        'group inline-flex items-center gap-2 h-10 px-3.5 md:px-4 rounded-full text-[13.5px] font-medium transition-all',
                         active
-                          ? 'bg-accent-grad text-white shadow-pill'
+                          ? 'bg-accent-grad text-white shadow-pill border border-transparent'
                           : 'border border-border bg-white text-fg hover:border-accent-1 hover:text-accent-1',
                       )}
                     >
-                      <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-                      {t.label}
+                      <Icon
+                        className={cn(
+                          'h-4 w-4 transition-colors',
+                          active ? 'text-white' : 'text-accent-1',
+                        )}
+                        aria-hidden="true"
+                      />
+                      <span>{t.label}</span>
+                      <span
+                        className={cn(
+                          'inline-flex items-center justify-center min-w-[1.4rem] h-5 px-1.5 rounded-full text-[11px] font-semibold transition-colors',
+                          active
+                            ? 'bg-white/25 text-white'
+                            : 'bg-bg-soft text-fg-muted group-hover:bg-violet-50 group-hover:text-accent-1',
+                        )}
+                      >
+                        {counts[t.key]}
+                      </span>
                     </button>
                   );
                 })}
               </div>
-              <SortSelect value={sort} onChange={setSort} strings={strings} />
-            </div>
-          </div>
-        </div>
 
-        {/* === Desktop layout — sidebar + grid === */}
-        <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-          {/* ---------- Sidebar ---------- */}
-          <aside className="hidden lg:block lg:col-span-3">
-            <div className="sticky top-28 rounded-3xl glass-strong shadow-card p-5">
-              {/* Short search bar */}
-              <SearchInput value={query} onChange={setQuery} />
-
-              {/* Categories */}
-              <h3 className="mt-6 mb-3 text-[11px] font-semibold uppercase tracking-eyebrow text-fg-muted">
-                Categories
-              </h3>
-              <ul role="tablist" className="flex flex-col gap-2">
-                {tabs.map((t) => {
-                  const active = filter === t.key;
-                  const Icon = TAB_ICONS[t.key];
-                  return (
-                    <li key={t.key}>
-                      <button
-                        role="tab"
-                        aria-selected={active}
-                        onClick={() => onTab(t.key)}
-                        className={cn(
-                          'group w-full inline-flex items-center justify-between gap-2 h-11 px-4 rounded-2xl text-[14px] font-medium transition-all',
-                          active
-                            ? 'bg-accent-grad text-white shadow-pill border border-transparent'
-                            : 'border border-border bg-white text-fg hover:border-accent-1 hover:text-accent-1',
-                        )}
-                      >
-                        <span className="flex items-center gap-2.5">
-                          <Icon
-                            className={cn(
-                              'h-4 w-4 transition-colors',
-                              active ? 'text-white' : 'text-accent-1',
-                            )}
-                            aria-hidden="true"
-                          />
-                          {t.label}
-                        </span>
-                        <span
-                          className={cn(
-                            'inline-flex items-center justify-center min-w-[1.5rem] h-5 px-1.5 rounded-full text-[11px] font-semibold transition-colors',
-                            active
-                              ? 'bg-white/25 text-white'
-                              : 'bg-bg-soft text-fg-muted group-hover:bg-violet-50 group-hover:text-accent-1',
-                          )}
-                        >
-                          {counts[t.key]}
-                        </span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-
-              {/* Sort */}
-              <div className="mt-6 pt-6 border-t border-border">
-                <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-eyebrow text-fg-muted">
-                  {strings.sortLabel}
-                </h3>
-                <SortSelect
-                  value={sort}
-                  onChange={setSort}
-                  strings={strings}
-                  fullWidth
-                />
+              {/* Sort — pushed to the right on md+ */}
+              <div className="md:ml-auto">
+                <SortSelect value={sort} onChange={setSort} strings={strings} />
               </div>
-
-              {/* Result counter */}
-              <p className="mt-6 text-[12.5px] text-fg-muted">
-                Showing{' '}
-                <span className="font-semibold text-fg">{filtered.length}</span>{' '}
-                of {products.length}
-              </p>
             </div>
-          </aside>
-
-          {/* ---------- Grid ---------- */}
-          <div className="lg:col-span-9">
-            {filtered.length === 0 ? (
-              <EmptyState
-                onClear={() => {
-                  setQuery('');
-                  onTab('all');
-                }}
-              />
-            ) : (
-              <motion.div
-                key={`${filter}-${sort}-${query}`}
-                variants={staggerParent}
-                initial="hidden"
-                whileInView="show"
-                viewport={inViewOnce}
-                className="grid gap-5 md:gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
-              >
-                {filtered.map((product) => (
-                  <motion.div key={product.slug} variants={fadeUp}>
-                    <ProductCard product={product} strings={strings} />
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
           </div>
+
+          {/* Result counter under the bar */}
+          <p className="mt-3 px-2 text-[12.5px] text-fg-muted">
+            Showing{' '}
+            <span className="font-semibold text-fg">{filtered.length}</span>{' '}
+            of {products.length}
+            {query && (
+              <>
+                {' '}
+                for{' '}
+                <span className="font-semibold text-fg">&ldquo;{query}&rdquo;</span>
+              </>
+            )}
+          </p>
         </div>
+
+        {/* === Grid === */}
+        {filtered.length === 0 ? (
+          <EmptyState
+            onClear={() => {
+              setQuery('');
+              onTab('all');
+            }}
+          />
+        ) : (
+          <motion.div
+            key={`${filter}-${sort}-${query}`}
+            variants={staggerParent}
+            initial="hidden"
+            whileInView="show"
+            viewport={inViewOnce}
+            className="grid gap-5 md:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          >
+            {filtered.map((product) => (
+              <motion.div key={product.slug} variants={fadeUp}>
+                <ProductCard product={product} strings={strings} />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </div>
     </section>
   );
@@ -291,32 +257,20 @@ function SortSelect({
   value,
   onChange,
   strings,
-  fullWidth = false,
 }: {
   value: SortKey;
   onChange: (s: SortKey) => void;
   strings: SiteContent['store'];
-  fullWidth?: boolean;
 }) {
   return (
-    <label
-      className={cn(
-        'flex items-center gap-2 text-[13px] text-fg-body',
-        fullWidth && 'w-full',
-      )}
-    >
-      {!fullWidth && (
-        <span className="uppercase tracking-eyebrow text-fg-muted">
-          {strings.sortLabel}
-        </span>
-      )}
+    <label className="flex items-center gap-2 text-[13px] text-fg-body">
+      <span className="uppercase tracking-eyebrow text-fg-muted">
+        {strings.sortLabel}
+      </span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value as SortKey)}
-        className={cn(
-          'h-10 px-3 rounded-full bg-white border border-border text-fg text-[13px] focus:outline-none focus:border-accent-1 focus:ring-2 focus:ring-accent-1/20 transition cursor-pointer',
-          fullWidth && 'w-full',
-        )}
+        className="h-10 px-3 rounded-full bg-white border border-border text-fg text-[13px] focus:outline-none focus:border-accent-1 focus:ring-2 focus:ring-accent-1/20 transition cursor-pointer"
       >
         <option value="popular">{strings.sortPopular}</option>
         <option value="newest">{strings.sortNewest}</option>

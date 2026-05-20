@@ -3,18 +3,29 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Home, Store } from 'lucide-react';
-import { ElevenAiMark } from '@/components/brand-logos';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { XfeinMark } from '@/components/brand-logos';
 import { navSpringIn } from '@/lib/animations';
 import { cn } from '@/lib/utils';
 
 interface Props {
   brand: string;
   nav: { home: string; store: string };
+  /** "/" for the home link respecting the current locale prefix */
+  homeHref?: string;
+  storeHref?: string;
 }
 
-export function Navbar({ brand, nav }: Props) {
+export function Navbar({
+  brand,
+  nav,
+  homeHref = '/',
+  storeHref = '/store',
+}: Props) {
   const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState<'home' | 'store'>('home');
+  const pathname = usePathname();
+  const isStore = pathname?.includes('/store');
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -31,55 +42,50 @@ export function Navbar({ brand, nav }: Props) {
         animate="show"
         aria-label="Primary"
         className={cn(
-          'pointer-events-auto flex items-center gap-1.5 rounded-full border border-border bg-white/80 p-1.5 transition-all duration-300',
+          'pointer-events-auto flex items-center gap-1.5 rounded-full p-1.5 transition-all duration-300',
           scrolled
-            ? 'shadow-card-hover backdrop-blur-md scale-[0.97]'
-            : 'shadow-card backdrop-blur-sm'
+            ? 'glass-strong shadow-card-hover scale-[0.97]'
+            : 'glass shadow-card'
         )}
       >
-        {/* Wordmark */}
-        <a
-          href="/"
-          className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full hover:bg-bg-soft transition-colors"
+        <Link
+          href={homeHref}
+          className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full hover:bg-white/40 transition-colors"
           aria-label={`${brand} home`}
         >
-          <ElevenAiMark className="h-6 w-6" />
-          <span className="text-[15px] font-bold tracking-tightish text-accent-1">
+          <XfeinMark className="h-6 w-6" />
+          <span className="text-[15px] font-bold tracking-tightish text-fg">
             {brand}
           </span>
-        </a>
+        </Link>
 
-        {/* Active pill */}
-        <button
-          type="button"
-          onClick={() => setActive('home')}
+        <Link
+          href={homeHref}
           className={cn(
             'flex items-center gap-1.5 rounded-full text-[14px] font-medium px-4 h-9 transition-all',
-            active === 'home'
+            !isStore
               ? 'bg-accent-grad text-white shadow-pill'
-              : 'text-fg hover:bg-bg-soft'
+              : 'text-fg hover:bg-white/40'
           )}
-          aria-current={active === 'home' ? 'page' : undefined}
+          aria-current={!isStore ? 'page' : undefined}
         >
           <Home className="h-4 w-4" aria-hidden="true" />
           {nav.home}
-        </button>
+        </Link>
 
-        {/* Inactive pill */}
-        <button
-          type="button"
-          onClick={() => setActive('store')}
+        <Link
+          href={storeHref}
           className={cn(
             'flex items-center gap-1.5 rounded-full text-[14px] font-medium px-4 h-9 transition-all',
-            active === 'store'
+            isStore
               ? 'bg-accent-grad text-white shadow-pill'
-              : 'text-fg hover:bg-bg-soft'
+              : 'text-fg hover:bg-white/40'
           )}
-          aria-current={active === 'store' ? 'page' : undefined}
+          aria-current={isStore ? 'page' : undefined}
         >
           <Store className="h-4 w-4" aria-hidden="true" />
           {nav.store}
-        </button>
+        </Link>
       </motion.nav>
     </header>
   );

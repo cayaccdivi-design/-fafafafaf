@@ -172,6 +172,55 @@
 
   /* Radix Accordion height animations are defined globally below */
 
+  /* ============================================================
+     GLASS effect — modern frosted card surfaces
+     ============================================================ */
+  .glass {
+    background: rgba(255, 255, 255, 0.55);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.7) inset,
+      0 8px 32px rgba(31, 38, 135, 0.08);
+  }
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: blur(28px) saturate(200%);
+    backdrop-filter: blur(28px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.95) inset,
+      0 12px 40px rgba(31, 38, 135, 0.1);
+  }
+  .glass-dark {
+    background: rgba(11, 11, 15, 0.5);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.08) inset,
+      0 12px 40px rgba(0, 0, 0, 0.25);
+  }
+  /* Glow ring used on hover for premium cards */
+  .glass-hover-ring:hover {
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.95) inset,
+      0 0 0 1px rgba(124, 58, 237, 0.18),
+      0 16px 48px rgba(124, 58, 237, 0.18);
+  }
+
+  /* Soft holographic sheen often layered over glass cards */
+  .holo-sheen {
+    background: linear-gradient(
+      135deg,
+      rgba(124, 58, 237, 0.1) 0%,
+      rgba(236, 72, 153, 0.06) 35%,
+      rgba(37, 99, 235, 0.1) 70%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
   /* Skip link */
   .skip-link {
     position: absolute;

@@ -79,6 +79,19 @@ export interface SiteContent {
     items: DesignServiceCard[];
     seeAll: string;
   };
+  showcase: {
+    eyebrow: string;
+    heading: string;
+    sub: string;
+    gamesLabel: string;
+    designLabel: string;
+    autoplayPlay: string;
+    autoplayPause: string;
+    prevLabel: string;
+    nextLabel: string;
+    highlightsLabel: string;
+    seeAll: string;
+  };
   serviceCommitment: {
     eyebrow: string;
     heading: string;

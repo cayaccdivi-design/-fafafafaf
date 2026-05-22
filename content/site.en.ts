@@ -21,6 +21,11 @@ export const siteEn: SiteContent = {
       'Delivered in minutes',
       '1-on-1 designer',
     ],
+    stats: [
+      { value: '10K+', label: 'Orders delivered' },
+      { value: '99%', label: 'On-time delivery' },
+      { value: '4.9★', label: 'Customer rating' },
+    ],
   },
   gameShowcase: {
     eyebrow: 'GAME TOP-UP',

@@ -55,16 +55,26 @@ export function FAQ({ data }: Props) {
           initial="hidden"
           whileInView="show"
           viewport={inViewOnce}
-          className="mx-auto max-w-[720px]"
+          className="mx-auto max-w-[760px]"
         >
-          <Accordion type="single" collapsible className="border-t border-border">
-            {data.items.map((item, i) => (
-              <AccordionItem key={i} value={`item-${i}`}>
-                <AccordionTrigger>{item.q}</AccordionTrigger>
-                <AccordionContent>{item.a}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <div className="rounded-3xl glass-strong shadow-card p-2 md:p-3">
+            <Accordion type="single" collapsible className="">
+              {data.items.map((item, i) => (
+                <AccordionItem
+                  key={i}
+                  value={`item-${i}`}
+                  className={
+                    i === data.items.length - 1
+                      ? 'border-b-0'
+                      : undefined
+                  }
+                >
+                  <AccordionTrigger>{item.q}</AccordionTrigger>
+                  <AccordionContent>{item.a}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
         </motion.div>
       </div>
     </section>

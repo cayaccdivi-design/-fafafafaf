@@ -27,7 +27,12 @@ const ICONS: Record<IconKey, LucideIcon> = {
 
 export function ServiceCommitment({ data }: Props) {
   return (
-    <section className="relative bg-bg-soft/60">
+    <section className="relative bg-bg-soft/60 overflow-hidden">
+      {/* Subtle ambient aurora behind the cards */}
+      <div className="aurora opacity-50" aria-hidden="true">
+        <span className="aurora-blob" />
+      </div>
+
       <div className="mx-auto max-w-content px-6 py-24 md:py-32">
         <motion.div
           variants={staggerParent}
@@ -69,12 +74,19 @@ export function ServiceCommitment({ data }: Props) {
               <motion.div
                 key={item.title}
                 variants={fadeUp}
-                className="group rounded-2xl bg-white border border-border p-7 md:p-8 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200"
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                className="gradient-ring group relative rounded-2xl bg-white border border-border p-7 md:p-8 shadow-card hover:shadow-card-hover transition-shadow duration-300"
               >
-                <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-accent-grad text-white mb-5">
-                  <Icon className="h-5 w-5" aria-hidden="true" />
+                {/* Icon — gradient bg + soft glow ring */}
+                <div className="relative mb-6 inline-flex">
+                  <div className="absolute inset-0 -z-10 rounded-xl bg-accent-grad blur-xl opacity-40 group-hover:opacity-70 transition-opacity duration-300" />
+                  <div className="flex items-center justify-center h-11 w-11 rounded-xl bg-accent-grad text-white shadow-[0_10px_28px_-10px_rgba(124,58,237,0.55)] ring-1 ring-white/30">
+                    <Icon className="h-5 w-5" aria-hidden="true" />
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold text-fg mb-2">
+
+                <h3 className="text-lg font-semibold text-fg mb-2 tracking-tightish">
                   {item.title}
                 </h3>
                 <p className="text-[15px] leading-7 text-fg-body">

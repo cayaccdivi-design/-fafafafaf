@@ -66,6 +66,7 @@ export interface SiteContent {
     primaryCta: string;
     secondaryCta: string;
     badges: string[];
+    stats: { value: string; label: string }[];
   };
   gameShowcase: {
     eyebrow: string;

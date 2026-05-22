@@ -21,6 +21,11 @@ export const siteZh: SiteContent = {
       '分钟级到账',
       '设计师 1 对 1 服务',
     ],
+    stats: [
+      { value: '1万+', label: '订单完成' },
+      { value: '99%', label: '准时交付' },
+      { value: '4.9★', label: '客户评分' },
+    ],
   },
   gameShowcase: {
     eyebrow: 'GAME TOP-UP',

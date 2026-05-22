@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Sparkles, Flame, Tag } from 'lucide-react';
 import {
@@ -94,31 +95,54 @@ export function ProductCard({ product, strings }: Props) {
         className="relative aspect-[16/10] overflow-hidden"
         style={{ backgroundImage: heroBg }}
       >
-        {/* Decorative orbs */}
-        <span
-          aria-hidden="true"
-          className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-white/25 blur-2xl"
-        />
-        <span
-          aria-hidden="true"
-          className="absolute -bottom-12 -left-8 h-36 w-36 rounded-full bg-black/15 blur-2xl"
-        />
+        {/* Real brand image overlay (when configured on the brand) */}
+        {game?.image && (
+          <Image
+            src={game.image}
+            alt=""
+            fill
+            sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover"
+            aria-hidden="true"
+          />
+        )}
 
-        {/* Centered glyph */}
-        <div className="absolute inset-0 grid place-items-center">
-          {game && (
-            <game.glyph
-              className="h-20 w-20 text-white/95 drop-shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
+        {/* Decorations & glyph only when no image is set */}
+        {!game?.image && (
+          <>
+            <span
               aria-hidden="true"
+              className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-white/25 blur-2xl"
             />
-          )}
-          {DesignIcon && (
-            <DesignIcon
-              className="h-16 w-16 text-white/95 drop-shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
+            <span
               aria-hidden="true"
+              className="absolute -bottom-12 -left-8 h-36 w-36 rounded-full bg-black/15 blur-2xl"
             />
-          )}
-        </div>
+
+            <div className="absolute inset-0 grid place-items-center">
+              {game && (
+                <game.glyph
+                  className="h-20 w-20 text-white/95 drop-shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
+                  aria-hidden="true"
+                />
+              )}
+              {DesignIcon && (
+                <DesignIcon
+                  className="h-16 w-16 text-white/95 drop-shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
+                  aria-hidden="true"
+                />
+              )}
+            </div>
+          </>
+        )}
+
+        {/* Subtle dim over image for badge legibility */}
+        {game?.image && (
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/15"
+          />
+        )}
 
         {/* Badges */}
         {product.badges.length > 0 && (

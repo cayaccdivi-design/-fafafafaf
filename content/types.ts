@@ -8,7 +8,8 @@ export type GameKey =
   | 'playtogether'
   | 'lol'
   | 'fifa'
-  | 'genshin';
+  | 'genshin'
+  | 'valorant';
 
 export type DesignServiceKey =
   | 'logo'

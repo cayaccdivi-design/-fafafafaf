@@ -8,6 +8,7 @@ import {
   useState,
   type SVGProps,
 } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -112,7 +113,11 @@ type ShowcaseItem = {
   gradFrom: string;
   gradTo: string;
   /** present for `kind==='game'` */
-  game?: { key: GameKey; Glyph: (p: SVGProps<SVGSVGElement>) => JSX.Element };
+  game?: {
+    key: GameKey;
+    Glyph: (p: SVGProps<SVGSVGElement>) => JSX.Element;
+    image?: string;
+  };
   /** present for `kind==='design'` */
   design?: { key: DesignServiceKey; Icon: LucideIcon };
   badges: ProductBadge[];
@@ -137,7 +142,7 @@ export function BrandShowcase({ data, designItems, store }: Props) {
         currency: product?.currency ?? '₫',
         gradFrom: brand.from,
         gradTo: brand.to,
-        game: { key: k, Glyph: brand.glyph },
+        game: { key: k, Glyph: brand.glyph, image: brand.image },
         badges: product?.badges ?? [],
         highlights: product?.highlights.slice(0, 3) ?? [],
       };
@@ -353,34 +358,61 @@ export function BrandShowcase({ data, designItems, store }: Props) {
                       backgroundImage: `linear-gradient(135deg, ${active.gradFrom} 0%, ${active.gradTo} 100%)`,
                     }}
                   >
-                    {/* Decorative orbs */}
-                    <span
-                      aria-hidden="true"
-                      className="absolute -top-12 -right-12 h-48 w-48 rounded-full bg-white/30 blur-2xl"
-                    />
-                    <span
-                      aria-hidden="true"
-                      className="absolute -bottom-16 -left-10 h-44 w-44 rounded-full bg-black/20 blur-2xl"
-                    />
-                    <span
-                      aria-hidden="true"
-                      className="holo-sheen absolute inset-0 opacity-60 mix-blend-soft-light"
-                    />
+                    {/* Brand image (overlays gradient when set) */}
+                    {active.game?.image && (
+                      <Image
+                        src={active.game.image}
+                        alt=""
+                        fill
+                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                        className="object-cover"
+                        priority
+                        aria-hidden="true"
+                      />
+                    )}
 
-                    {/* Centered glyph */}
-                    <div className="absolute inset-0 grid place-items-center">
-                      {active.game ? (
-                        <active.game.Glyph
-                          className="h-32 w-32 md:h-40 md:w-40 text-white/95 drop-shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
+                    {/* Decorations only when no image is set */}
+                    {!active.game?.image && (
+                      <>
+                        <span
                           aria-hidden="true"
+                          className="absolute -top-12 -right-12 h-48 w-48 rounded-full bg-white/30 blur-2xl"
                         />
-                      ) : active.design ? (
-                        <active.design.Icon
-                          className="h-24 w-24 md:h-32 md:w-32 text-white/95 drop-shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
+                        <span
                           aria-hidden="true"
+                          className="absolute -bottom-16 -left-10 h-44 w-44 rounded-full bg-black/20 blur-2xl"
                         />
-                      ) : null}
-                    </div>
+                        <span
+                          aria-hidden="true"
+                          className="holo-sheen absolute inset-0 opacity-60 mix-blend-soft-light"
+                        />
+                      </>
+                    )}
+
+                    {/* Centered glyph (hidden when image is set) */}
+                    {!active.game?.image && (
+                      <div className="absolute inset-0 grid place-items-center">
+                        {active.game ? (
+                          <active.game.Glyph
+                            className="h-32 w-32 md:h-40 md:w-40 text-white/95 drop-shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
+                            aria-hidden="true"
+                          />
+                        ) : active.design ? (
+                          <active.design.Icon
+                            className="h-24 w-24 md:h-32 md:w-32 text-white/95 drop-shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
+                            aria-hidden="true"
+                          />
+                        ) : null}
+                      </div>
+                    )}
+
+                    {/* Subtle bottom gradient over image for legibility of pills */}
+                    {active.game?.image && (
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20"
+                      />
+                    )}
 
                     {/* Top-left pill: kind */}
                     <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-white/85 backdrop-blur px-3 h-7 text-[11.5px] font-semibold uppercase tracking-eyebrow text-fg">

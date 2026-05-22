@@ -13,7 +13,7 @@ export const siteEn: SiteContent = {
     eyebrow: 'xfein · Game & Design Studio',
     headlineLine1: 'Game top-ups & visual design',
     headlineGradient: 'in one place',
-    sub: 'Authentic top-ups for Roblox, Liên Quân, Free Fire, Play Together, LoL, FIFA and Genshin — paired with logo, banner, thumbnail and YouTube design services. All on xfein.',
+    sub: 'Authentic top-ups for Roblox, Liên Quân, Free Fire, Play Together, LoL, Valorant, FIFA and Genshin — paired with logo, banner, thumbnail and YouTube design services. All on xfein.',
     primaryCta: 'Enter store',
     secondaryCta: 'Track order',
     badges: [

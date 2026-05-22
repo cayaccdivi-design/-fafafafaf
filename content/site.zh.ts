@@ -13,7 +13,7 @@ export const siteZh: SiteContent = {
     eyebrow: 'xfein · Game & Design Studio',
     headlineLine1: '游戏充值 · 视觉设计',
     headlineGradient: '一站直达',
-    sub: 'Roblox、Liên Quân、Free Fire、Play Together、LoL、FIFA、Genshin 等热门游戏官方充值，加上 Logo / 横幅 / 缩略图等设计服务，全部在 xfein 一站搞定。',
+    sub: 'Roblox、Liên Quân、Free Fire、Play Together、LoL、Valorant、FIFA、Genshin 等热门游戏官方充值，加上 Logo / 横幅 / 缩略图等设计服务，全部在 xfein 一站搞定。',
     primaryCta: '进入商城',
     secondaryCta: '订单查询',
     badges: [

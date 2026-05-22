@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   setRequestLocale,
@@ -122,28 +123,49 @@ export default async function ProductPage({
                   className="relative aspect-[16/10] overflow-hidden rounded-3xl shadow-card-hover"
                   style={{ backgroundImage: heroBg }}
                 >
-                  <span
-                    aria-hidden="true"
-                    className="absolute -top-16 -right-16 h-60 w-60 rounded-full bg-white/30 blur-3xl"
-                  />
-                  <span
-                    aria-hidden="true"
-                    className="absolute -bottom-20 -left-12 h-60 w-60 rounded-full bg-black/20 blur-3xl"
-                  />
-                  <div className="absolute inset-0 grid place-items-center">
-                    {game && (
-                      <game.glyph
-                        className="h-44 w-44 text-white/95 drop-shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
+                  {game?.image && (
+                    <Image
+                      src={game.image}
+                      alt=""
+                      fill
+                      sizes="(min-width: 1024px) 56vw, 100vw"
+                      className="object-cover"
+                      priority
+                      aria-hidden="true"
+                    />
+                  )}
+                  {!game?.image && (
+                    <>
+                      <span
                         aria-hidden="true"
+                        className="absolute -top-16 -right-16 h-60 w-60 rounded-full bg-white/30 blur-3xl"
                       />
-                    )}
-                    {DesignIcon && (
-                      <DesignIcon
-                        className="h-36 w-36 text-white/95 drop-shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
+                      <span
                         aria-hidden="true"
+                        className="absolute -bottom-20 -left-12 h-60 w-60 rounded-full bg-black/20 blur-3xl"
                       />
-                    )}
-                  </div>
+                      <div className="absolute inset-0 grid place-items-center">
+                        {game && (
+                          <game.glyph
+                            className="h-44 w-44 text-white/95 drop-shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
+                            aria-hidden="true"
+                          />
+                        )}
+                        {DesignIcon && (
+                          <DesignIcon
+                            className="h-36 w-36 text-white/95 drop-shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </div>
+                    </>
+                  )}
+                  {game?.image && (
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10"
+                    />
+                  )}
                   {game && (
                     <span className="absolute top-5 left-5">
                       <GameBadge brand={product.brand as GameKey} size={48} />

@@ -3,8 +3,7 @@ import { getSiteContent } from '@/content';
 import { getFeaturedProducts } from '@/content/products';
 import { Navbar } from '@/components/Navbar';
 import { Hero } from '@/components/Hero';
-import { GameShowcase } from '@/components/GameShowcase';
-import { DesignServices } from '@/components/DesignServices';
+import { BrandShowcase } from '@/components/BrandShowcase';
 import { ServiceCommitment } from '@/components/ServiceCommitment';
 import { HowItWorks } from '@/components/HowItWorks';
 import { FeaturedProducts } from '@/components/FeaturedProducts';
@@ -34,14 +33,10 @@ export default async function HomePage({
 
       <main id="main">
         <Hero hero={site.hero} />
-        <GameShowcase
-          data={site.gameShowcase}
-          fromPrefix={site.store.fromPrefix}
-          currency="₫"
-        />
-        <DesignServices
-          data={site.designServices}
-          fromPrefix={site.designServices.items[0]?.cta ?? ''}
+        <BrandShowcase
+          data={site.showcase}
+          designItems={site.designServices.items}
+          store={site.store}
         />
         <FeaturedProducts
           data={site.featured}

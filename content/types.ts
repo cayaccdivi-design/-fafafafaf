@@ -8,7 +8,8 @@ export type GameKey =
   | 'playtogether'
   | 'lol'
   | 'fifa'
-  | 'genshin';
+  | 'genshin'
+  | 'valorant';
 
 export type DesignServiceKey =
   | 'logo'
@@ -65,6 +66,7 @@ export interface SiteContent {
     primaryCta: string;
     secondaryCta: string;
     badges: string[];
+    stats: { value: string; label: string }[];
   };
   gameShowcase: {
     eyebrow: string;
@@ -77,6 +79,19 @@ export interface SiteContent {
     heading: string;
     sub: string;
     items: DesignServiceCard[];
+    seeAll: string;
+  };
+  showcase: {
+    eyebrow: string;
+    heading: string;
+    sub: string;
+    gamesLabel: string;
+    designLabel: string;
+    autoplayPlay: string;
+    autoplayPause: string;
+    prevLabel: string;
+    nextLabel: string;
+    highlightsLabel: string;
     seeAll: string;
   };
   serviceCommitment: {

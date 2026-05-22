@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type { CSSProperties, SVGProps } from 'react';
 
 /* ============================================================
@@ -30,7 +31,18 @@ export function XfeinMark(props: SVGProps<SVGSVGElement>) {
 }
 
 /* ============================================================
-   Game brand registry — colors + monogram glyphs
+   Game brand registry — colors, monogram glyphs and (optional)
+   image overrides.
+
+   To attach a real image to a game (recommended for production):
+     1. Drop the file at  public/games/<key>.<ext>
+        e.g.  public/games/roblox.png
+     2. Set the matching brand's `image` field below to that path,
+        e.g.  image: '/games/roblox.png'
+
+   When `image` is set, it overlays the gradient + glyph everywhere
+   the brand is rendered (sidebar badge, showcase banner, product
+   card, product detail page).
    ============================================================ */
 export type GameKey =
   | 'roblox'
@@ -39,13 +51,20 @@ export type GameKey =
   | 'playtogether'
   | 'lol'
   | 'fifa'
-  | 'genshin';
+  | 'genshin'
+  | 'valorant';
 
 export interface GameBrand {
   name: string;
+  /** Gradient start color — used as fallback background and behind transparent images. */
   from: string;
+  /** Gradient end color. */
   to: string;
+  /** Monogram glyph. Rendered when `image` is not set. */
   glyph: (p: SVGProps<SVGSVGElement>) => JSX.Element;
+  /** Optional path to a brand image. Set this once you've uploaded
+   *  the file to /public (see header comment for instructions). */
+  image?: string;
 }
 
 const baseSvg = {
@@ -182,47 +201,91 @@ function GenshinGlyph(p: SVGProps<SVGSVGElement>) {
   );
 }
 
+function ValorantGlyph(p: SVGProps<SVGSVGElement>) {
+  // Stylised V — solid wedge with an inner notch (Valorant logomark vibe)
+  return (
+    <svg {...baseSvg} {...p}>
+      <path
+        d="M3 4.5h4.5L12 16.4 16.5 4.5H21l-7.5 16.5h-3L3 4.5Z"
+        fill="currentColor"
+      />
+      <path
+        d="m16.5 4.5-4.5 11.9L7.5 4.5"
+        stroke="#fff"
+        strokeOpacity="0.22"
+        strokeWidth="0.9"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
 /* --- Brand registry --- */
 export const GAME_BRANDS: Record<GameKey, GameBrand> = {
-  roblox: { name: 'Roblox', from: '#FF4D4D', to: '#FF7A00', glyph: RobloxGlyph },
+  roblox: {
+    name: 'Roblox',
+    from: '#FF4D4D',
+    to: '#FF7A00',
+    glyph: RobloxGlyph,
+    // image: '/games/roblox.png',
+  },
   lienquan: {
     name: 'Liên Quân',
     from: '#F59E0B',
     to: '#B45309',
     glyph: LienQuanGlyph,
+    // image: '/games/lienquan.png',
   },
   freefire: {
     name: 'Free Fire',
     from: '#EF4444',
     to: '#EC4899',
     glyph: FreeFireGlyph,
+    // image: '/games/freefire.png',
   },
   playtogether: {
     name: 'Play Together',
     from: '#06B6D4',
     to: '#3B82F6',
     glyph: PlayTogetherGlyph,
+    // image: '/games/playtogether.png',
   },
   lol: {
     name: 'League of Legends',
     from: '#A855F7',
     to: '#0EA5E9',
     glyph: LolGlyph,
+    // image: '/games/lol.png',
   },
-  fifa: { name: 'FIFA', from: '#22C55E', to: '#0D9488', glyph: FifaGlyph },
+  fifa: {
+    name: 'FIFA',
+    from: '#22C55E',
+    to: '#0D9488',
+    glyph: FifaGlyph,
+    // image: '/games/fifa.png',
+  },
   genshin: {
     name: 'Genshin Impact',
     from: '#A78BFA',
     to: '#F472B6',
     glyph: GenshinGlyph,
+    // image: '/games/genshin.png',
+  },
+  valorant: {
+    name: 'Valorant',
+    from: '#FF4655',
+    to: '#BD3944',
+    glyph: ValorantGlyph,
+    // image: '/games/valorant.png',
   },
 };
 
 export const GAME_KEYS = Object.keys(GAME_BRANDS) as GameKey[];
 
 /* ============================================================
-   GameBadge — gradient square with the brand monogram
-   Use anywhere a logo is needed.
+   GameBadge — gradient square with the brand monogram, OR a
+   real image overlay when `brand.image` is set.
    ============================================================ */
 interface GameBadgeProps {
   brand: GameKey;
@@ -252,7 +315,7 @@ export function GameBadge({
 
   return (
     <span
-      className={`inline-flex items-center justify-center text-white shadow-[0_6px_18px_-6px_rgba(0,0,0,0.3)] ${ROUND_MAP[rounded]} ${className}`}
+      className={`relative inline-flex items-center justify-center overflow-hidden text-white shadow-[0_6px_18px_-6px_rgba(0,0,0,0.3)] ${ROUND_MAP[rounded]} ${className}`}
       style={{
         width: size,
         height: size,
@@ -261,7 +324,18 @@ export function GameBadge({
       }}
       aria-label={b.name}
     >
-      <Glyph width={glyphSize} height={glyphSize} />
+      {b.image ? (
+        <Image
+          src={b.image}
+          alt=""
+          fill
+          sizes={`${size}px`}
+          className="object-cover"
+          aria-hidden="true"
+        />
+      ) : (
+        <Glyph width={glyphSize} height={glyphSize} />
+      )}
     </span>
   );
 }

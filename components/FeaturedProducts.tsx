@@ -15,7 +15,12 @@ interface Props {
 
 export function FeaturedProducts({ data, products, storeStrings }: Props) {
   return (
-    <section className="relative">
+    <section className="relative overflow-hidden">
+      {/* Subtle ambient aurora behind the grid */}
+      <div className="aurora opacity-40" aria-hidden="true">
+        <span className="aurora-blob" />
+      </div>
+
       <div className="mx-auto max-w-content px-6 py-24 md:py-32">
         <motion.div
           variants={staggerParent}
@@ -67,7 +72,7 @@ export function FeaturedProducts({ data, products, storeStrings }: Props) {
         >
           <Link
             href="/store"
-            className="group inline-flex items-center gap-2 rounded-full bg-fg text-white h-11 px-5 text-[14px] font-medium hover:-translate-y-0.5 transition-all duration-200"
+            className="shimmer-btn group inline-flex items-center gap-2 rounded-full bg-fg text-white h-12 px-6 text-[15px] font-medium hover:-translate-y-0.5 hover:shadow-[0_16px_38px_rgba(0,0,0,0.18)] transition-all duration-200"
           >
             {data.seeAll}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

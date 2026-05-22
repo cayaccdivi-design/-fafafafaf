@@ -175,6 +175,30 @@ export const products: Product[] = [
       'Compatible with all servers',
     ],
   },
+  {
+    slug: 'valorant-points',
+    category: 'games',
+    brand: 'valorant',
+    name: 'Valorant · VP',
+    tagline: 'Valorant Points for Riot Valorant',
+    description:
+      'Top up Valorant Points (VP) through Riot\u2019s authorised channel. Use VP for skins, the battle pass, agent contracts and Radianite.',
+    fromPrice: 50000,
+    currency: '₫',
+    badges: ['new', 'popular'],
+    variants: [
+      { id: '475vp', label: '475 VP', price: 50000 },
+      { id: '1000vp', label: '1,000 VP', price: 105000 },
+      { id: '2050vp', label: '2,050 VP', price: 215000 },
+      { id: '3650vp', label: '3,650 VP', price: 369000 },
+      { id: '5350vp', label: '5,350 VP', price: 519000 },
+    ],
+    highlights: [
+      'Authorised Riot channel — SEA / VN region',
+      'Use VP for skins, battle pass, agent contracts',
+      'Delivered in minutes, no password required',
+    ],
+  },
 
   /* -------------------- DESIGN SERVICES -------------------- */
   {
